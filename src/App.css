@@ -27,6 +27,7 @@
   color: var(--text-h);
   background: var(--bg);
   border: 1px solid var(--border);
+  border-color: var(--border);
   border-radius: 8px;
   outline: none;
   transition: border-color 0.2s;
@@ -47,9 +48,12 @@
     border-color 0.2s,
     box-shadow 0.2s;
 }
+
 .btn:hover:not(:disabled) {
   border-color: var(--accent-border);
+  box-shadow: 0 0 0 1px var(--accent-border);
 }
+
 .btn.primary {
   background: var(--accent-bg);
   border-color: var(--accent-border);

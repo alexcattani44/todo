@@ -66,7 +66,7 @@ function App() {
   async function toggle(id: string) {
     try {
       const { todo, parent } = await api.toggle(id);
-      // Update the toggled todo and, when present, its parent — no refetch.
+      // Update the toggled todo and, when present, its parent without refetch.
       upsert(todo, parent);
     } catch (e) {
       setError((e as Error).message);
@@ -85,7 +85,9 @@ function App() {
         // Drop the todo and any of its sub-todos from the UI.
         const next = prev.filter((t) => t.id !== id && t.parentId !== id);
         // Removing a sub-todo may have flipped the parent's completed state.
-        return parent ? next.map((t) => (t.id === parent.id ? parent : t)) : next;
+        return parent
+          ? next.map((t) => (t.id === parent.id ? parent : t))
+          : next;
       });
     } catch (e) {
       setError((e as Error).message);

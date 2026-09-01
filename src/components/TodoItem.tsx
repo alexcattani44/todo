@@ -11,7 +11,13 @@ type RowProps = {
 };
 
 /** A single todo line: checkbox, (editable) title, delete. Shared by parents and children. */
-function Row({ todo, disableCheckbox, onToggle, onDelete, onRename }: RowProps) {
+function Row({
+  todo,
+  disableCheckbox,
+  onToggle,
+  onDelete,
+  onRename,
+}: RowProps) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(todo.title);
 
@@ -33,7 +39,9 @@ function Row({ todo, disableCheckbox, onToggle, onDelete, onRename }: RowProps) 
         disabled={disableCheckbox}
         onChange={() => onToggle(todo.id)}
         aria-label={`Toggle ${todo.title}`}
-        title={disableCheckbox ? "Completes when all sub-todos are done" : undefined}
+        title={
+          disableCheckbox ? "Completes when all sub-todos are done" : undefined
+        }
       />
 
       {editing ? (
@@ -65,6 +73,7 @@ function Row({ todo, disableCheckbox, onToggle, onDelete, onRename }: RowProps) 
         className="icon-btn"
         onClick={() => setEditing(true)}
         aria-label={`Edit ${todo.title}`}
+        title="Rename"
       >
         ✎
       </button>
@@ -72,6 +81,7 @@ function Row({ todo, disableCheckbox, onToggle, onDelete, onRename }: RowProps) 
         className="icon-btn danger"
         onClick={() => onDelete(todo.id)}
         aria-label={`Delete ${todo.title}`}
+        title="Delete"
       >
         ✕
       </button>
@@ -120,7 +130,11 @@ export function TodoItem({
           onDelete={onDelete}
           onRename={onRename}
         />
-        <button className="add-sub" onClick={() => setAdding((a) => !a)}>
+        <button
+          className="add-sub"
+          onClick={() => setAdding((a) => !a)}
+          title="Add a sub-todo"
+        >
           + sub-todo
         </button>
       </div>
@@ -149,7 +163,11 @@ export function TodoItem({
                   onChange={(e) => setSubTitle(e.target.value)}
                   aria-label={`New sub-todo under ${todo.title}`}
                 />
-                <button className="btn" type="submit" disabled={!subTitle.trim()}>
+                <button
+                  className="btn"
+                  type="submit"
+                  disabled={!subTitle.trim()}
+                >
                   Add
                 </button>
               </form>
