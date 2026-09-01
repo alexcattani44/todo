@@ -64,7 +64,7 @@ npm run dev
 
 Frontend runs on http://localhost:5173
 
-### API
+## API
 
 | Method | Path                | Purpose                                               |
 | ------ | ------------------- | ----------------------------------------------------- |
@@ -93,3 +93,21 @@ A similar issue occurs with `DELETE /todos/:id`. If a sub-todo is deleted,
 and the resulting list of sub-todos are all complete, then the parent todo
 should be toggled to completed. Since delete should not return the `todo` itself,
 it only returns `parent` so `recalcParent` fires.
+
+## Questions/Assumptions
+
+**Q**: Where does the functionality for toggling a parent live?
+
+**Assumption**: It should live in the child todo because that has access to the parent through `parentId`.
+
+**Q**: Should toggling the parent toggle the children?
+
+**Assumption**: Being able to mass complete a parent and all of its children sounds nice. But what would happen when the parent is untoggled? You would have to maintain the previous state of all of its children.
+
+**Q**: Should you be able to toggle parents at all?
+
+**Assumption**: No, a parent is only complete if the children are all complete. Use a read-only checkbox for user readability.
+
+**Q**: Should the grouping by parents be done on the backend or frontend?
+
+**Assumption**: The frontend; the backend can return a flat array for quicker server-side responses. The frontend will map by parent ids to create the indented list view. This tradeoff can be explored further depending on server load or browser performance.
