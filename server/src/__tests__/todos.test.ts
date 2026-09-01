@@ -80,7 +80,7 @@ describe("DELETE /todos/:id", () => {
     const child = (await createTodo("Child D1", parent.id)).body;
 
     const res = await request(app).delete(`/todos/${parent.id}`);
-    expect(res.status).toBe(204);
+    expect(res.status).toBe(200);
 
     expect(
       await prisma.todo.findUnique({ where: { id: parent.id } }),
@@ -88,6 +88,28 @@ describe("DELETE /todos/:id", () => {
     expect(
       await prisma.todo.findUnique({ where: { id: child.id } }),
     ).toBeNull();
+  });
+
+  it("marks the parent complete after deleting its last incomplete sub-todo", async () => {
+    const parent = (await createTodo("Parent E")).body;
+    const done = (await createTodo("Child E1", parent.id)).body;
+    const pending = (await createTodo("Child E2", parent.id)).body;
+
+    // Complete one child; the parent is still incomplete because of `pending`.
+    let res = await request(app).patch(`/todos/${done.id}/toggle`);
+    expect(res.body.parent.completed).toBe(false);
+
+    // Deleting the remaining incomplete child leaves only completed children,
+    // so the parent flips to complete — and the response reports it.
+    res = await request(app).delete(`/todos/${pending.id}`);
+    expect(res.status).toBe(200);
+    expect(res.body.parent.id).toBe(parent.id);
+    expect(res.body.parent.completed).toBe(true);
+
+    const refreshed = await prisma.todo.findUnique({
+      where: { id: parent.id },
+    });
+    expect(refreshed?.completed).toBe(true);
   });
 
   it("returns a 404 if the todo does not exist", async () => {

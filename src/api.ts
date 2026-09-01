@@ -45,6 +45,6 @@ export const api = {
 
   remove: (id: string) =>
     fetch(`${BASE}/todos/${id}`, { method: "DELETE" }).then((r) =>
-      handle<void>(r),
+      handle<{ parent: Todo | null }>(r),
     ),
 };

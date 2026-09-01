@@ -10,7 +10,7 @@
   margin-bottom: 24px;
 }
 
-/* Add row (top-level and sub) */
+/* Add row (parent and sub) */
 .add-row {
   display: flex;
   gap: 8px;
@@ -43,7 +43,9 @@
   background: var(--social-bg);
   color: var(--text-h);
   cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 .btn:hover:not(:disabled) {
   border-color: var(--accent-border);
@@ -137,7 +139,9 @@
   border-radius: 6px;
   cursor: pointer;
   opacity: 0.6;
-  transition: opacity 0.2s, background 0.2s;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
 }
 .icon-btn:hover {
   opacity: 1;

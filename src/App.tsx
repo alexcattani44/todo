@@ -80,9 +80,13 @@ function App() {
 
   async function remove(id: string) {
     try {
-      await api.remove(id);
-      // Drop the todo and any of its sub-todos from the UI.
-      setTodos((prev) => prev.filter((t) => t.id !== id && t.parentId !== id));
+      const { parent } = await api.remove(id);
+      setTodos((prev) => {
+        // Drop the todo and any of its sub-todos from the UI.
+        const next = prev.filter((t) => t.id !== id && t.parentId !== id);
+        // Removing a sub-todo may have flipped the parent's completed state.
+        return parent ? next.map((t) => (t.id === parent.id ? parent : t)) : next;
+      });
     } catch (e) {
       setError((e as Error).message);
     }

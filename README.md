@@ -46,18 +46,18 @@ npm test
 
 ### API
 
-| Method | Path                  | Purpose                                              |
-| ------ | --------------------- | ---------------------------------------------------- |
-| GET    | `/todos`              | List all todos (flat array; `parentId` gives nesting)|
-| POST   | `/todos`              | Create a top-level todo or sub-todo                  |
-| PATCH  | `/todos/:id/toggle`   | Flip `completed`, cascading to the parent            |
-| PATCH  | `/todos/:id`          | Rename a todo (inline editing)                       |
-| DELETE | `/todos/:id`          | Delete a todo (sub-todos cascade)                    |
+| Method | Path                | Purpose                                               |
+| ------ | ------------------- | ----------------------------------------------------- |
+| GET    | `/todos`            | List all todos (flat array; `parentId` gives nesting) |
+| POST   | `/todos`            | Create a top-level todo or sub-todo                   |
+| PATCH  | `/todos/:id/toggle` | Flip `completed`, cascading to the parent             |
+| PATCH  | `/todos/:id`        | Rename a todo (inline editing)                        |
+| DELETE | `/todos/:id`        | Delete a todo (sub-todos cascade)                     |
 
 ### Note: returning the updated parent from toggle
 
 `PATCH /todos/:id/toggle` responds with `{ todo, parent }`, where `parent`
-is `null` for a top-level todo. When a sub-todo is toggled, the server
+is `null` for a top-level (or parent) todo. When a sub-todo is toggled, the server
 recomputes the parent's `completed` state (`true` only when every child is
 complete), persists it, and returns the refreshed parent alongside the
 toggled todo.

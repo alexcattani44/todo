@@ -105,7 +105,12 @@ router.delete("/todos/:id", async (req, res) => {
   }
 
   await prisma.todo.delete({ where: { id: existing.id } });
-  res.status(204).end();
+
+  // Recompute AFTER the delete: dropping an incomplete sub-todo can leave the
+  // parent with only completed children, which flips the parent to complete.
+  const parent = await recalcParent(existing.parentId);
+
+  res.json({ parent });
 });
 
 export default router;
