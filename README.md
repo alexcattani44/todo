@@ -26,6 +26,16 @@ VITE_API_URL=http://localhost:4000
 
 ### 3. Backend
 
+Quick command:
+
+```bash
+cd server
+npm install
+npm run serve
+```
+
+Granular:
+
 ```bash
 cd server
 npm install
@@ -43,6 +53,16 @@ Run backend tests with:
 cd server
 npm test
 ```
+
+### 4. Frontend (in a separate terminal)
+
+```bash
+cd .. # root dir
+npm install
+npm run dev
+```
+
+Frontend runs on http://localhost:5173
 
 ### API
 
@@ -73,13 +93,3 @@ A similar issue occurs with `DELETE /todos/:id`. If a sub-todo is deleted,
 and the resulting list of sub-todos are all complete, then the parent todo
 should be toggled to completed. Since delete should not return the `todo` itself,
 it only returns `parent` so `recalcParent` fires.
-
-### 4. Frontend (in a separate terminal)
-
-```bash
-cd .. # root dir
-npm install
-npm run dev
-```
-
-Frontend runs on http://localhost:5173
