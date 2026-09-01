@@ -94,13 +94,21 @@ function App() {
     }
   }
 
-  const remaining = todos.filter((t) => !t.completed).length;
+  // Compute the number of remaining todos.
+  const remaining = useMemo(
+    () => todos.filter((t) => !t.completed).length,
+    [todos],
+  );
 
   return (
     <main className="app">
-      <h1>To-Do</h1>
+      <h1>To-Do List</h1>
       <p className="subtitle">
-        {loading ? "Loading…" : `${remaining} of ${todos.length} remaining`}
+        {loading
+          ? "Loading…"
+          : remaining === 0
+            ? "All done!"
+            : `${remaining} of ${todos.length} remaining`}
       </p>
 
       <form
