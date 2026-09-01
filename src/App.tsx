@@ -30,7 +30,7 @@ function App() {
     return map;
   }, [todos]);
 
-  const topLevel = useMemo(
+  const parents = useMemo(
     () => todos.filter((t) => t.parentId === null),
     [todos],
   );
@@ -44,7 +44,7 @@ function App() {
     });
   }
 
-  async function addTopLevel() {
+  async function addParent() {
     const title = newTitle.trim();
     if (!title) return;
     try {
@@ -101,7 +101,7 @@ function App() {
         className="add-row"
         onSubmit={(e) => {
           e.preventDefault();
-          addTopLevel();
+          addParent();
         }}
       >
         <input
@@ -126,12 +126,12 @@ function App() {
         </p>
       )}
 
-      {!loading && topLevel.length === 0 && (
+      {!loading && parents.length === 0 && (
         <p className="empty">No to-dos yet. Add one above.</p>
       )}
 
       <ul className="todo-list">
-        {topLevel.map((todo) => (
+        {parents.map((todo) => (
           <TodoItem
             key={todo.id}
             todo={todo}
