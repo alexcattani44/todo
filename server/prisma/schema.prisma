@@ -17,4 +17,6 @@ model Todo {
   title     String
   completed Boolean  @default(false)
   parentId  String?
+  parent    Todo?    @relation("Subtodos", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Todo[]   @relation("Subtodos")
 }

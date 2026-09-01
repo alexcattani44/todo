@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Agent context directories
+.agents
+.claude
+.windsurf
+
 .env
 .env.example
 

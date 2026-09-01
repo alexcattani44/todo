@@ -5,7 +5,7 @@
 
 */
 -- DropTable
-DROP TABLE "Friend";
+DROP TABLE IF EXISTS "Friend";
 
 -- CreateTable
 CREATE TABLE "Todo" (
