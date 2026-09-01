@@ -123,8 +123,10 @@
 
 .edit-input {
   flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
   font: inherit;
-  padding: 4px 8px;
+  padding: 0;
   color: var(--text-h);
   background: var(--bg);
   border: 1px solid var(--accent-border);
