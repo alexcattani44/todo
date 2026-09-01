@@ -20,18 +20,26 @@ afterEach(async () => {
   }
 });
 
-describe("PATCH /todos/:id/toggle — parent cascade", () => {
+describe("GET /todos", () => {
+  it("returns a list of todos as a flat array", async () => {
+    const res = await request(app).get("/todos");
+    expect(res.status).toBe(200);
+    expect(res.body).toBeInstanceOf(Array);
+  });
+});
+
+describe("PATCH /todos/:id/toggle with parent cascade", () => {
   it("marks the parent completed after completing the last remaining sub-todo", async () => {
     const parent = (await createTodo("Parent A")).body;
     const child1 = (await createTodo("Child A1", parent.id)).body;
     const child2 = (await createTodo("Child A2", parent.id)).body;
 
-    // Complete the first child — parent still has an incomplete child.
+    // Complete the first child; parent still has an incomplete child.
     let res = await request(app).patch(`/todos/${child1.id}/toggle`);
     expect(res.status).toBe(200);
     expect(res.body.parent.completed).toBe(false);
 
-    // Complete the last remaining child — parent should flip to complete.
+    // Complete the last remaining child; parent should flip to complete.
     res = await request(app).patch(`/todos/${child2.id}/toggle`);
     expect(res.status).toBe(200);
     expect(res.body.todo.completed).toBe(true);
@@ -49,7 +57,7 @@ describe("PATCH /todos/:id/toggle — parent cascade", () => {
     let res = await request(app).patch(`/todos/${child2.id}/toggle`);
     expect(res.body.parent.completed).toBe(true);
 
-    // Uncheck one child — parent should return to incomplete.
+    // Uncheck one child; parent should return to incomplete.
     res = await request(app).patch(`/todos/${child1.id}/toggle`);
     expect(res.status).toBe(200);
     expect(res.body.todo.completed).toBe(false);
@@ -57,7 +65,7 @@ describe("PATCH /todos/:id/toggle — parent cascade", () => {
   });
 });
 
-describe("POST /todos — nesting rules", () => {
+describe("POST /todos with nesting rules", () => {
   it("returns an error when creating a sub-todo under a todo that is itself a sub-todo", async () => {
     const parent = (await createTodo("Parent C")).body;
     const child = (await createTodo("Child C1", parent.id)).body;
@@ -100,7 +108,7 @@ describe("DELETE /todos/:id", () => {
     expect(res.body.parent.completed).toBe(false);
 
     // Deleting the remaining incomplete child leaves only completed children,
-    // so the parent flips to complete — and the response reports it.
+    // so the parent flips to complete and the response reports it.
     res = await request(app).delete(`/todos/${pending.id}`);
     expect(res.status).toBe(200);
     expect(res.body.parent.id).toBe(parent.id);
