@@ -62,12 +62,17 @@ recomputes the parent's `completed` state (`true` only when every child is
 complete), persists it, and returns the refreshed parent alongside the
 toggled todo.
 
-I did this so the client can apply both changes from a single response — it
-merges `todo` and `parent` into local state by `id` — rather than firing a
-second request or re-fetching the whole list just to learn the parent's new
-state. The parent's checkbox updates in place. Parents that have sub-todos
-render a read-only checkbox, since their completion is derived from their
-children rather than toggled directly.
+I did this so the client can apply both changes from a single response rather than
+firing a second request or re-fetching the whole list just to learn the parent's
+new state. This single action merges `todo` and `parent` into local state by `id`.
+The parent's checkbox updates in place. Parents that have sub-todos render
+a read-only checkbox, since their completion is derived from their children
+rather than toggled directly.
+
+A similar issue occurs with `DELETE /todos/:id`. If a sub-todo is deleted,
+and the resulting list of sub-todos are all complete, then the parent todo
+should be toggled to completed. Since delete should not return the `todo` itself,
+it only returns `parent` so `recalcParent` fires.
 
 ### 4. Frontend (in a separate terminal)
 
